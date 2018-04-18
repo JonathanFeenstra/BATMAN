@@ -22,5 +22,9 @@ def help():
 def contact():
     return render_template('contact.html')
 
+@app.route('/***REMOVED***')
+def ***REMOVED***():
+    return render_template('***REMOVED***.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
