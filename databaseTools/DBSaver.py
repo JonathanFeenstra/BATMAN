@@ -44,6 +44,7 @@ def __save_terms(dict, cursor):
         __save_term_PMID(pmid, mainterm, cursor)
         for synonym in synonymList:
             __save_synonym(synonym, mainterm, cursor)
+        __commit(cursor)
 
 # Methode om de category op te slaan als deze nog niet in de db staat
 def __save_category(category, cursor):
