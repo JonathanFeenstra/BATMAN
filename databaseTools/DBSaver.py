@@ -17,15 +17,21 @@
 import DBConnector as dbc                               # wordt gebruikt om de cursor en de connectie object op te halen
 import DBLoader as dbl
 import traceback                                        # Wordt gebruikt om de volledige error te krijgen ipv alleen de titel
+import time
 
 # Hoofd methode die de sub methodes aanroept om de verschillende directories op te slaan
 def save(synonymDict, pmidDict, linkDict):
     try:
         cursor, connection = dbc.connect()              # De cursor en connection objecten worden op gehaald om queries te kunnen uitvoeren en de verbinding te verbreken
+        print(1)
         __save_PMID(pmidDict, cursor)                    # De __save_PMID wordt aangeroepen om de gegevens van de pmidDict op te slaan in de db
+        print(2)
         __save_terms(synonymDict, cursor)
+        print(3)
         __save_links(linkDict, cursor)
+        print(4)
         __commit(cursor)                                # De __commit methode wordt aangeroepen als er geen exceptions zijn geweest en de queries die zijn uitgevoerd bevestigd kunnen worden in de db
+        print(5)
         connection.disconnect()                         # Verbreek de connectie met de db
         dbl.get_data()                                   # maak van de db een JSON
     except Exception as e:
@@ -40,21 +46,30 @@ def __save_terms(dict, cursor):
         pmid = valueList[1]
         synonymList = valueList[0]
         __save_category(category, cursor)
+        __commit(cursor)
+        print("a")
         __save_main_term(mainterm, category, cursor)
+        __commit(cursor)
+        print("b")
         __save_term_PMID(pmid, mainterm, cursor)
+        __commit(cursor)
+        print("c")
         for synonym in synonymList:
             __save_synonym(synonym, mainterm, cursor)
         __commit(cursor)
+        print("d")
 
 # Methode om de category op te slaan als deze nog niet in de db staat
 def __save_category(category, cursor):
     if __check_uniqueness("type", "classification", category, cursor):            # sla alleen op als het uniek is
         cursor.execute("INSERT INTO type VALUES (%s)", (category,))
+        print(12)
 
 # Methode om de hoofdterm op te slaan
 def __save_main_term(term, category, cursor):
     if __check_uniqueness("node", "mainterm", term, cursor):
         cursor.execute("INSERT INTO node VALUES (%s,%s)",(term,category))
+        print(13)
 
 # Methode om de connectie tussen de hoofdterm en de artikelen op te slaan
 def __save_term_PMID(pmidDict, term, cursor):
@@ -82,6 +97,7 @@ def __check_uniqueness(tableName, columnName,
 def __save_synonym(synonym, mainterm, cursor):
     if __check_uniqueness("keyword", "word", synonym, cursor, " AND mainterm LIKE \"" + mainterm + "\""):
         cursor.execute("INSERT INTO keyword VALUES (default,%s,%s)",(synonym,mainterm))
+    print(18)
 
 # Methode om de requests te verzilveren in de db
 def __commit(cursor):
@@ -89,11 +105,21 @@ def __commit(cursor):
 
 # Methode om de artikelen op te slaan in de db
 def __save_PMID(dict, cursor):
+    counter = 0
     for id in dict.keys():
-        if __check_uniqueness("pubmed_article", "pmid", id, cursor):
-            data = dict[id]
-            cursor.execute("INSERT INTO pubmed_article VALUES (%s,%s,%s,%s)",
-                           (id,data[0],data[1],data[2]))
+        try:
+            if __check_uniqueness("pubmed_article", "pmid", id, cursor):
+                data = dict[id]
+                cursor.execute("INSERT INTO pubmed_article VALUES (%s,%s,%s,%s)",
+                               (id,data[0],data[1],data[2]))
+            if counter == 10:
+                __commit(cursor)
+                counter = 0
+
+            print(counter)
+            counter += 1
+        except Exception as e:
+            print(str(traceback.format_exc()))  # Laat de error zien als deze heeft plaats gevonden. Vanwege de brede scala aan SQL errors is er voor gekozen om de algemene Exception te pakken en de details te laten printen voor de developer
 
 # Methode om de links tussen de nodes op te slaan
 def __save_links(dict, cursor):
@@ -106,6 +132,8 @@ def __save_links(dict, cursor):
             cursor.execute("INSERT INTO link VALUES (%s,%s)",(linkID,score))
             __insert_node_link(term, linkID, cursor)
             __insert_node_link(linkterm, linkID, cursor)
+            __commit(cursor)
+            print(23)
 
 # Methode om een nieuwe link_id te krijgen
 def __get_link_ID(cursor):

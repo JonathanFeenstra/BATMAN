@@ -25,7 +25,7 @@ def get_data():
 # Methode die van de db data maakt voor een json bestand
 def __create_JSON_data(cursor):
     cursor.execute("SELECT * FROM node")            # Haalt alle nodes op zodat vanaf daar de gehele db kan worden door gezocht
-    catDict = {}                                    # Een dict die bij houdt welke categoriën er al zijn geweest
+    catDict = {}                                    # Een dict die bij houdt welke categorien er al zijn geweest
     catMax = 0                                      # Index variable om bij te houden welke kleur getal d3 moet gebruiken
     data = dict()                                   # Dict waar alles in wordt opgeslagen
     data["nodes"] = []                              # Maak nodes key aan om de node data in op te slaan
@@ -76,15 +76,19 @@ def __create_nodes(term, category, nodeScore, synonyms, pmidDict, data, catList,
 # Methode om de link data op te slaan in de data dict
 def __create_links(linkDict, hoofdterm, data, cursor, linkMemory):
     for linkID in linkDict.keys():
+        known = False
+        linkTerm = get_link_term(linkID, hoofdterm, cursor)
         for lijst in linkMemory:
-            linkTerm = get_link_term(linkID, hoofdterm, cursor)
-            if not (lijst.__contains__(hoofdterm) and lijst.__contains__(linkTerm)):
-                data["links"].append({
-                    'source' : hoofdterm,
-                    'target' : linkTerm,
-                    'value' : linkDict[linkID]
-                })
-                linkMemory.append([hoofdterm,linkTerm])
+            if lijst.__contains__(hoofdterm) and lijst.__contains__(linkTerm):
+                known = True
+
+        if not known:
+            data["links"].append({
+                'source' : hoofdterm,
+                'target' : linkTerm,
+                'value' : linkDict[linkID]
+            })
+            linkMemory.append([hoofdterm,linkTerm])
 
     return data,linkMemory
 
