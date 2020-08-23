@@ -1,24 +1,23 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python3
 """
-    batman.app
-    ~~~~~~~~~~
+batman.app
+~~~~~~~~~~
 
-    Web application for visualizing the health effects of bitter gourd and yam
-    compounds, based on our results from text mining PubMed abstracts.
+Web application for visualizing the health effects of bitter gourd and yam
+compounds, based on our results from text mining PubMed abstracts.
 
-    This script is responsible for running the web application.
+This script is responsible for running the web application.
 
-    Known bugs: none.
+Known bugs: none.
 
-    :copyright: © 2018 by Jonathan Feenstra.
-    :license: MIT, see LICENSE for more details.
+:copyright: © 2018 by Jonathan Feenstra.
+:license: MIT
 """
 
 __version__ = '1.0'
 
-from flask import (Flask, redirect, render_template, request, url_for)
-
+from flask import Flask, render_template
 
 # Initialize and configure Flask app
 app = Flask(__name__, instance_relative_config=True)
@@ -75,15 +74,6 @@ def contact():
     :returns: rendered 'contact.html' template.
     """
     return render_template('contact.html')
-
-
-@app.route('/***REMOVED***')
-def ***REMOVED***():
-    """Render the '***REMOVED***.html' template.
-
-    :returns: rendered '***REMOVED***.html' template.
-    """
-    return render_template('***REMOVED***.html')
 
 
 @app.errorhandler(404)

@@ -28,7 +28,7 @@ mainterm : [[synoniemen], {pmid : score}, categorie]}
 {PMID : [title, authors, date]}
 {relationterm : {linkterm : [PMID]}.
 - In 'textmining' zijn er andere bestanden gemaakt. Er is een 'textmining.py', 'afterprocessing.py', 'search_lists.py' en 'USE_THIS_SCRIPT.py'. Zie de betreffende files voor commentaar. De 'USE_THIS_SCRIPT.py' is de file die je runt om de textmining te starten. Hier kan aangegeven worden welke lijst je gaat doorzoeken, die staan in 'search_lists.py'. Dit is gedaan om de text mining te verdelen over meerdere computers. Hierbij is rekening gehouden met het zoekbereik van het woord, zodat woorden als 'cancer' een aparte groep krijgen.
-- De 'logicaJS' is een stuk uitgebreider geworden. Er zijn 4 javascipts genaamd: 'modernizr-1.5.min.js', 'network.js', '***REMOVED***.js', 'pubmed-chart.js'. 'network.js' is nog steeds het script dat verantwoordelijk is voor de visualisatie van de graaf. Het aantal methodes en variabelen is veel uitgebreider geworden dan in de class diagram te zien is (zie betreffende files voor commentaar).
+- De 'logicaJS' is een stuk uitgebreider geworden. Er zijn 2 JavaScript bestanden genaamd: 'network.js', 'pubmed-chart.js'. 'network.js' is nog steeds het script dat verantwoordelijk is voor de visualisatie van de graaf. Het aantal methodes en variabelen is veel uitgebreider geworden dan in de class diagram te zien is (zie betreffende files voor commentaar).
 - Classes van 'textmining' maken geen gebruik meer van NLTK, zoals vermeld in de commentbox.
 
 ### Technische gegevens structuur (ERD)

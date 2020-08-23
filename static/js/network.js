@@ -883,20 +883,11 @@ function addKeywordFilter() {
     div.appendChild(label);
 }
 
-// Download svg as PNG
-function downloadAsPNG() {
-    var canvas = document.createElement("canvas");
-    a = document.createElement('a');
-    xml = (new XMLSerializer()).serializeToString(svg.node());
-    xml = xml.replace(/xmlns=\"http:\/\/www\.w3\.org\/2000\/svg\"/, '');
-    canvas.width = width;
-    canvas.height = height;
-    canvg(canvas, xml);
-    var dataURL = canvas.toDataURL("image/png");
-    dataURL = dataURL.replace(/^data:image\/[^;]*/, "data:application/octet-stream");
-    dataURL = dataURL.replace(/^data:application\/octet-stream/, "data:application/octet-stream;headers=Content-Disposition%3A%20attachment%3B%20filename=network.png");
-    this.href = dataURL;
+// Download SVG
+function downloadSVG() {
+    $("svg").attr({version: '1.1', xmlns:"http://www.w3.org/2000/svg"});
+    this.href = "data:image/svg+xml;base64,\n" + btoa(unescape(encodeURIComponent($('#network-div').html())));
 }
 
 // Add download event listener to link
-document.getElementById("download").addEventListener("click", downloadAsPNG, false);
+document.getElementById("download").addEventListener("click", downloadSVG, false);

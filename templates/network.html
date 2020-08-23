@@ -15,9 +15,11 @@ of its functionality. For details, see the instructions on the help page.-->
 <p>Missing some keywords? <a href="{{ url_for('contact') }}#message">Ask the staff</a> to add them to the network.</p>
 <!-- Network, release button and download PNG link -->
 <article class="main-col">
-  <svg id="network"></svg>
+  <div id="network-div">
+      <svg id="network" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"></svg>
+  </div>
   <input id="release" type="submit" value="Release all nodes">
-  <a id="download" download="network.png" href="#">Download as PNG</a>
+  <a id="download" href-lang="image/svg+xml" download="network.svg" href="#">Download as SVG</a>
 </article>
 <!-- Right column -->
 <aside class="sidebar">
